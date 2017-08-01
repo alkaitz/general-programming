@@ -10,14 +10,88 @@ import math
     one side to the other without raising any alarm
 '''
 
-def triggersRadar(position, radar):
-    posX, posY = position
-    radarX, radarY, radius = radar
-    return (math.sqrt(abs(posX - radarX)**2 + abs(posY - radarY)**2) <= radius)
+def distance(position1, position2):
+    origX, origY = position1
+    destX, destY = position2
+    return math.sqrt(abs(origX - destX)**2 + abs(origY - destY)**2)
 
-def checkTunnel(width, radars):
-    pass
+def triggersRadar(position, radar):
+    radarPosition, radiusSensor = radar
+    return  distance(position, radarPosition)<= radiusSensor
+
+def doRadarsCollide(radar1, radar2):
+    radarPosition1, radiusSensor1 = radar1
+    radarPosition2, radiusSensor2 = radar2
+    return distance(radarPosition1, radarPosition2) < radiusSensor1 + radiusSensor2
+
+def doesRadarTouchBorder(radar, width):
+    radarPosition, radiusSensor = radar
+    radarX, _ = radarPosition
+    borderPosition = (radarX, width)
+    return distance(radarPosition, borderPosition) < radiusSensor
+
+def createContiguousGroups(radars):
+    groups = []
+    for radar in radars:
+        if not groups:
+            groups.append([radar])
+        else:
+            found = False
+            for group in groups:
+                for r in group:
+                    if doRadarsCollide(radar, r):
+                        group.append(radar)
+                        found = True
+                        break
+                if found:
+                    break
+            if not found:
+                groups.append([radar])
+    return groups
+
+def canCrossTunnel(width, radars):
+    groups = createContiguousGroups(radars)
+    for group in groups:
+        # Verify if the group crosses both borders
+        crossesUpper, crossesDown = False, False
+        for radar in group:
+            if doesRadarTouchBorder(radar, 0):
+                crossesDown = True
+            if doesRadarTouchBorder(radar, width):
+                crossesUpper = True
+        if crossesUpper and crossesDown:
+            return False
+    return True
 
 if __name__ == '__main__':
-    assert(not triggersRadar((0,0), (1,1,1)))
-    assert(triggersRadar((0,0), (2,0,2)))
+    def testRadar():
+        assert(not triggersRadar((0,0), ((1,1),1)))
+        assert(triggersRadar((0,0), ((2,0),2)))
+
+    def testGroups():
+        collidingGroup = [
+                        ((0,0), 2),
+                        ((0,2), 1)
+                        ]
+        apartGroup = [
+                    ((0,0), 1),
+                    ((0,3), 1)
+                    ]
+        mixedGroup = [
+                    ((0,0), 3),
+                    ((2,2), 1),
+                    ((10,0), 2)
+                    ]
+        assert(len(createContiguousGroups(collidingGroup)) == 1)
+        assert(len(createContiguousGroups(apartGroup)) == 2)
+        assert(len(createContiguousGroups(mixedGroup)) == 2)
+
+    def testTunnel():
+        assert(canCrossTunnel(10, [((1,1), 5)]))
+        assert(not canCrossTunnel(2, [((1,1), 5)]))
+        assert(canCrossTunnel(100, [((1,1), 5), ((3,5), 20), ((50,50), 5)]))
+
+    testRadar()
+    testGroups()
+    testTunnel()
+    print "Successful"
