@@ -6,8 +6,8 @@ Created on Aug 1, 2017
 import math
 
 '''
-    There is a tunnel with width w and a set of radars (x, y, radius) places in the tunnel. Check if it is possible to cross from 
-    one side to the other without raising any alarm
+    There is a 2D tunnel with width w and a set of radars (x, y, radius) placed inside of it.
+    Check if it is possible to cross from one side to the other without raising any alarm
 '''
 
 def distance(position1, position2):
