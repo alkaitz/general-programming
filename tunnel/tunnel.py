@@ -3,6 +3,7 @@ Created on Aug 1, 2017
 
 @author: alkaitz
 '''
+
 import math
 
 '''
@@ -31,23 +32,20 @@ def doesRadarTouchBorder(radar, width):
     return distance(radarPosition, borderPosition) < radiusSensor
 
 def createContiguousGroups(radars):
-    groups = []
-    for radar in radars:
-        if not groups:
-            groups.append([radar])
-        else:
-            found = False
-            for group in groups:
-                for r in group:
-                    if doRadarsCollide(radar, r):
-                        group.append(radar)
-                        found = True
-                        break
-                if found:
-                    break
-            if not found:
-                groups.append([radar])
-    return groups
+    def doGroupsCollide(group1, group2):
+        return any(True for r1 in group1 for r2 in group2 if doRadarsCollide(r1, r2))
+
+    groups = map(lambda x: {x}, radars)
+    result = []
+    while groups:
+        group = groups[0]
+        groups.remove(group)
+        for other in groups:
+            if doGroupsCollide(group, other):
+                groups.remove(other)
+                group = group.union(other)
+        result.append(group)
+    return result
 
 def canCrossTunnel(width, radars):
     groups = createContiguousGroups(radars)
