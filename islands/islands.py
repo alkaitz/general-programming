@@ -47,7 +47,7 @@ def createIsland(position):
     island.expandables = getExpandableCells(position)
     return island
 
-def createEarth(position):
+def createSoil(position):
     targetIslands = []
     for island in ocean:
         if island.canExpandTo(position) or island.containsSoil(position):
@@ -69,7 +69,7 @@ def createEarth(position):
 
     return len(ocean)
 
-def removeEarth(position):
+def removeSoil(position):
     #TODO Fill content
     return len(ocean)
 
@@ -77,9 +77,9 @@ def printInfo():
     print "Islands: ", islands, " Ocean: ", ocean, " Soils: ", existingSoils
 
 if __name__ == '__main__':
-    islands = createEarth((0,0))
+    islands = createSoil((0,0))
     printInfo()
-    islands = createEarth((5,5))
+    islands = createSoil((5,5))
     printInfo()
-    islands = createEarth((0,1))
+    islands = createSoil((0,1))
     printInfo()
