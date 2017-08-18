@@ -18,7 +18,7 @@ def distance(position1, position2):
 
 def triggersRadar(position, radar):
     radarPosition, radiusSensor = radar
-    return  distance(position, radarPosition)<= radiusSensor
+    return  distance(position, radarPosition) <= radiusSensor
 
 def doRadarsCollide(radar1, radar2):
     radarPosition1, radiusSensor1 = radar1
@@ -38,8 +38,7 @@ def createContiguousGroups(radars):
     groups = map(lambda x: {x}, radars)
     result = []
     while groups:
-        group = groups[0]
-        groups.remove(group)
+        group = groups.pop()
         for other in groups:
             if doGroupsCollide(group, other):
                 groups.remove(other)
