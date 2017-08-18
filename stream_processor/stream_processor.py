@@ -19,15 +19,15 @@ working_set = []
 heapq.heapify(working_set)
 repeated = set()
 
+def process(str):
+    includeWord(str)
+    return getLongestWord(str)
+
 '''
     Structure will be sorted by negative numbers to transform it from a min heap to a max heap.
     Storing the tuple, to provide right sorting.
     None returned if data set is empty (all received words have appeared more than once)
 '''
-def process(str):
-    includeWord(str)
-    return getLongestWord(str)
-
 def includeWord(str):
     if str not in repeated:
         if (-len(str),str) not in working_set:
