@@ -12,13 +12,17 @@ Created on Aug 7, 2017
     output = [10,15,5]
 '''
 
-def index_array(a, i):
-    for index in range(len(i)):
-        while i[index] != index:
-            indexOrigin = index
-            indexTarget = i[index]
-            a[indexOrigin], a[indexTarget] = a[indexTarget], a[indexOrigin]
-            i[indexOrigin], i[indexTarget] = i[indexTarget], i[indexOrigin]
+def index_array(array, indexes):
+    for index in range(len(indexes)):
+        while indexes[index] != index:
+            swapPositionsInArrays(array, indexes, index, i[index])
+
+def swapPositionsInArrays(array, indexes, index1, index2):
+    swapPositions(array, index1, index2)
+    swapPositions(indexes, index1, index2)
+
+def swapPositions(array, index1, index2):
+    array[index1], array[index2] = array[index2], array[index1]
 
 if __name__ == '__main__':
     a = [5,10,15]
