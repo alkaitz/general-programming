@@ -25,17 +25,24 @@ repeated = set()
     None returned if data set is empty (all received words have appeared more than once)
 '''
 def process(str):
+    includeWord(str)
+    return getLongestWord(str)
+
+def includeWord(str):
     if str not in repeated:
         if (-len(str),str) not in working_set:
             heapq.heappush(working_set, (-len(str),str))
         else:
             working_set.remove((-len(str),str))
             repeated.add(str)
+
+def getLongestWord(str):
     (length, _) = (working_set[0]) if working_set else (None, None)
     return -length if length else None
 
 if __name__ == '__main__':
     assert(process("Hello") == 5)
+    assert(process("Hello") == None)
     assert(process("Hello") == None)
     assert(process("Hallo") == 5)
     assert(process("Bye") == 5)
