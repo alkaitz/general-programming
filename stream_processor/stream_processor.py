@@ -21,7 +21,7 @@ repeated = set()
 
 def process(str):
     includeWord(str)
-    return getLongestWord(str)
+    return getLongestWord()
 
 '''
     Structure will be sorted by negative numbers to transform it from a min heap to a max heap.
@@ -37,9 +37,11 @@ def includeWord(str):
             working_set.remove(lenPlusStringTuple)
             repeated.add(str)
 
-def getLongestWord(str):
-    (length, _) = (working_set[0]) if working_set else (None, None)
-    return -length if length else None
+def getLongestWord():
+    if len(working_set) > 0:
+        (length, _) = (working_set[0])
+        return -length
+    return None
 
 if __name__ == '__main__':
     assert(process("Hello") == 5)
