@@ -30,10 +30,11 @@ def process(str):
 '''
 def includeWord(str):
     if str not in repeated:
-        if (-len(str),str) not in working_set:
-            heapq.heappush(working_set, (-len(str),str))
+        lenPlusStringTuple = (-len(str),str)
+        if lenPlusStringTuple not in working_set:
+            heapq.heappush(working_set, lenPlusStringTuple)
         else:
-            working_set.remove((-len(str),str))
+            working_set.remove(lenPlusStringTuple)
             repeated.add(str)
 
 def getLongestWord(str):
